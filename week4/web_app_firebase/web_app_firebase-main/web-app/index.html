@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+    <main>
+        <!-- Hiển thị nhiệt độ và độ ẩm -->
+        <form>
+            <h1 id="nhietdo">-5</h1>
+            <h2 id="doam">-10</h2>
+            <br />
+        </form>
+        <!-- Hình ảnh và nhãn -->
+        <form>
+            <!-- Hiển thị hình ảnh -->
+            <img src="img/fan_off.png" class="fan_on" alt="" />
+            <button type="button" id="btn1" class="btn waves-effect waves-lights">On</button>
+            <button type="button" id="btn2" class="btn waves-effect waves-lights">Off</button>
+            <br /><br />
+            <!-- Nhãn hiển thị văn bản -->
+            <label for="text">This website is made by KMT team</label><br />
+            <label for="text">Nguyen Ngoc Hoang</label><br />
+            <label for="text">Do Minh Toan</label><br />
+            <label for="text">Truong Quang Phuc</label><br />
+        </form>
+    </main>
+
+    <!-- Import Firebase SDK and initialize -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import {
+            getDatabase,
+            ref,
+            onValue
+        } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfwSD11rDE8iLj8rP6jF9KDYCNVnjy7F8",
+            authDomain: "my-webpage-c2282.firebaseapp.com",
+            databaseURL: "https://my-webpage-c2282-default-rtdb.firebaseio.com/",
+            projectId: "my-webpage-c2282",
+            storageBucket: "my-webpage-c2282.appspot.com",
+            messagingSenderId: "319884901417",
+            appId: "1:319884901417:web:891e87feefcdd731047038",
+            measurementId: "G-67L61RPPY9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+
+        const nhietDo = document.getElementById("nhietdo");
+        const doAm = document.getElementById("doam");
+        const nhietDoRef = ref(db, "Nhiet do");
+        const doAmRef = ref(db, "Do am");
+
+        onValue(nhietDoRef, (snapshot) => {
+            nhietDo.innerText = snapshot.val();
+        });
+
+        onValue(doAmRef, (snapshot) => {
+            doAm.innerText = snapshot.val();
+        });
+    </script>
+
+    <!-- Import custom functions -->
+    <script type="module" src="functions.js"></script>
+</body>
+
+</html>

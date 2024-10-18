@@ -1,0 +1,273 @@
+body {
+    font-family: tahoma;
+    font-size: 28px;
+    width: 1000px;
+    margin: 0px auto;
+    background-image: url("bautroi.jpg");
+}
+/* Thiết lập các thuộc tính CSS cơ bản cho toàn bộ trang web (phần body trong HTML), 
+sử dụng font "Tahoma" (font-family) với font chữ là 28px (font-size) và phần nội dung được 
+canh giữa trang web (margin: 0px auto), chiều rộng của trang web là 1000px,
+hình nền cho trang web được lấy trong url = "bautroi.jpg" */
+
+#header {
+    width: 1000px;
+    height: 70px;
+    background-image: url("f.jpg");
+    color: white;
+    text-align: center;
+    line-height: 70px;
+}
+/* Thiết lập định dạng CSS cho phần Header của trang web,
+chiều cao và rộng của header là 70px và 1000px với màu chữ là màu trắng, hình nền được lấy từ url = "g.jpg",
+phần nội dung bên trong được canh giữa theo chiều ngang (text-align) và căn giữa theo chiều dọc với chiều cao dòng là 70px*/
+
+#header #logo {
+    width: 70px;
+    height: 70px;
+    float: left;
+}
+/* Định dạng cho logo của trang web trong phần Header với chiều cao và rộng là 70px và được canh trái trong Header */
+
+#banner {
+    height: 50px;
+    width: 1000px;
+    background-image: url("a.jpg");
+}
+/* Định dạng banner cho trang web với chiều cao và chiều rộng là 50px và 1000px, sử dụng ảnh nền có nguồn url = "a.jpg" */
+
+#main {
+    min-height: 565px;
+    width: 1000px;
+    background-color: white;
+    background-image: url("main1.jpeg");
+}
+/* Định dạng phần nội dung chính của trang web với chiều cao tối thiểu và chiều rộng là 565px và 1000px,
+sử dụng màu nền trắng và ảnh nền có nguồn url = "jpeg" */
+
+#main #top {
+    min-height: 315px;
+}
+#main #bot {
+    min-height: 200px;
+}
+/* Định dạng các phần bên trong của phần nội dung với 
+top: chiều cao tối thiểu là 315px
+bot: chiều cao tối thiểu là 200px */
+
+#footer {
+    background: whitesmoke;
+    min-height: 45px;
+    width: 1000px;
+}
+/* Định dạng cho phần chân trang với màu nền là whitesmoke, chiều cao tối thiểu và chiều rộng là 45px và 1000px */
+
+#header ul {
+    margin: 0px;
+    padding: 0px;
+}
+#header ul li {
+    list-style: none;
+    float: right;
+    width: 90%;
+    font-size: 50px;
+}
+/* Định dạng kiểu list trong phần Header */
+
+.tag {
+    width: 100%;
+    height: 60px;
+}
+.tag button {
+    width: 10%;
+    height: 50px;
+    font-size: 20px;
+    margin-left: 10%;
+    margin-right: 2%;
+}
+#footer ul {
+    margin: 0px;
+    padding: 0px;
+}
+#footer ul li {
+    list-style: none;
+    float: left;
+    width: 65%;
+    font-size: 15px;
+}
+/* Định dạng kiểu list trong phần Footer */
+
+#nd {
+    width: 100px;
+    height: 120px;
+    margin-left: 10%;
+    margin-top: 1%;
+    float: left;
+}
+/* Định dạng cho phần hiển thị nhiệt độ với chiều rộng là 100px chiều cao là 120px, căn lề trái 
+và có khoảng cách đến lề trái là 10% trang web và lề trên là 1% */
+
+img#nd1 {
+    width: 120px;
+    height: 120px;
+    margin-left: 50%;
+}
+/* Định dạng cho phần hiển thị logo nhiệt độ với chiều rộng và chiều cao là 120px  và cách lề trái 50% */
+
+h2 {
+    font-size: x-large;
+    width: 120px;
+    height: 30px;
+    margin-left: 60%;
+    color: green;
+}
+/* Định dạng cho phần hiển thị chữ "Nhiệt độ" với cỡ chữ lớn, chiều rộng và chiều cao là 180px và 30px, cách lề trái 60% và có màu chữ là xanh lá */
+
+#da {
+    width: 100px;
+    height: 120px;
+    margin-left: 20%;
+    float: left;
+    margin-top: 2%;
+}
+/* Định dạng cho phần hiển thị độ ẩm với chiều rộng là 100px chiều cao là 120px, căn lề trái 
+và có khoảng cách đến lề trái là 20% trang web và lề trên là 2% */
+
+img#da1 {
+    width: 120px;
+    height: 120px;
+    margin-left: 50%;
+}
+/* Định dạng cho phần hiển thị logo độ ẩm với chiều rộng và chiều cao là 120px  và cách lề trái 50% */
+
+h4 {
+    font-size: x-large;
+    width: 120px;
+    height: 30px;
+    margin-left: 70%;
+    color: green;
+}
+/* Định dạng cho phần hiển thị chữ "Độ ẩm" với cỡ chữ lớn, chiều rộng và chiều cao là 180px và 30px, cách lề trái 70% và có màu chữ là xanh lá */
+
+#lm {
+    width: 100px;
+    height: 120px;
+    margin-right: 17%;
+    margin-top: -0.7%;
+    float: right;
+}
+/* Định dạng cho phần hiển thị lượng mưa với chiều rộng là 100px chiều cao là 120px, căn lề phải 
+và có khoảng cách đến lề phải là 17% trang web và lề trên là -0.7% */
+
+img#lm1 {
+    width: 120px;
+    height: 120px;
+    margin-right: 50%;
+}
+/* Định dạng cho phần hiển thị logo lượng mưa với chiều rộng và chiều cao là 120px  và cách lề trái 50% */
+
+h6 {
+    font-size: x-large;
+    width: 180px;
+    height: 30px;
+    margin-left: 10%;
+    color: green;
+}
+/* Định dạng cho phần hiển thị chữ "Lượng mưa" với cỡ chữ lớn, chiều rộng và chiều cao là 180px và 30px, cách lề trái 30% và có màu chữ là xanh lá */
+
+.thongso {
+    width: 90%;
+    height: 20%;
+    position: relative;
+    top: 50%;
+    margin-left: 0px; /*Phần tử không bị đẩy sang trái và bắt đầu với cạnh trái của phần tử chứa nó*/
+}
+/* Định dạng cho phần hiển thị thông số như nhiệt độ, độ ẩm lượng mưa với chiều rộng là 90% trang, chiều dài là 20% trang,
+canh chỉnh tương đối và di chuyển đối tượng 50% từ trên xuống (top 50%) */
+
+#nhietdo {
+    position: relative;
+    right: 35%;
+    margin-top: 165px;
+    float: left;
+}
+#doam {
+    position: relative;
+    left: -7%;
+    margin-top: 165px;
+    float: left;
+}
+#luongmua {
+    margin-top: 165px;
+    left: 10%;
+    float: right;
+    position: relative;
+}
+/* Định dạng cho các phần hiển thị trên giao diện với lề là 165px và
+    Nhiệt độ: Căn lề trái, căn chỉnh tương đối và di chuyển về bên phải 35% so với vị trí gốc,
+    Độ ẩm: Căn lề trái, căn chỉnh tương đối và di chuyển ngược 7% so với vị trí gốc
+    Lượng mưa: Căn lề phải, căn chỉnh tương đối và di chuyển 10% về bên trái so với vị trí gốc */
+
+#bot h1 {
+    width: 200px;
+    height: 225px;
+    display: inline-block;
+    border-style: inset;
+    margin-left: 9.5%;
+}
+/* Định dạng cho phần hiển thị logo trong phần giao diện Gọi điện, Đèn, Loa với chiều rộng và chiều cao là 200px và 255px */
+
+#bot h1 h2 {
+    width: 100%;
+    height: 10%;
+    background-color: beige;
+}
+button {
+    width: 60px;
+    height: 30px;
+    margin-left: 10%;
+    font-size: 20px;
+    font-family: revert;
+    margin-right: auto;
+}
+/* Định dạng cho các nút bấm trong phần giao diện với chiều rộng là 60px, chiều cao là 30px, kích thước font chữ là 20px và
+khoảng cách từ lề trái là 10% */
+
+#bot h2 {
+    float: left;
+    margin-left: 18%;
+    margin-top: -13%;
+    font-size: 20px;
+    font-family: tahoma;
+    color: black;
+}
+/* Định dạng cho hiển thị chữ SOS trong giao diện của phần Gọi điện với font "tahoma", màu chữ đen,
+căn lề trái, cách lề trái 18%, cách lề trên -13%, cỡ chữ là 20px */
+
+#bot h3 {
+    float: left;
+    margin-left: 48.5%;
+    margin-top: -13%;
+    font-size: 20px;
+    font-family: tahoma;
+    color: black;
+}
+/* Định dạng cho hiển thị chữ Đèn trong giao diện của phần Đèn với font "tahoma", màu chữ đen,
+căn lề trái, cách lề trái 48.5%, cách lề trên -13%, cỡ chữ là 20px */
+
+#bot h4 {
+    float: left;
+    margin-left: 79.5%;
+    margin-top: -13%;
+    font-size: 20px;
+    font-family: tahoma;
+    color: black;
+}
+/* Định dạng cho hiển thị chữ Loa trong giao diện của phần Loa với font "tahoma", màu chữ đen,
+căn lề trái, cách lề trái 79.5%, cách lề trên -13%, cỡ chữ là 20px */
+
+#time {
+    margin-left: 44%;
+    font-family: tahoma;
+}
+/* Định dạng cho phần hiển thị thời gian: sử dụng font chữ "Tahoma" và có khoảng cách từ lề trái là 44% (căn giữa) */

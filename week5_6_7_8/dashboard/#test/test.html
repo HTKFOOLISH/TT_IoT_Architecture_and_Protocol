@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"> <!-- định dạng kí tự -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- hiển thị toàn phù hợp với màn hình máy tính, điện thoại, máy tính bảng, ... -->
+    <title>Smart Lock</title>
+
+    <!-- Gowun Batang Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- đường link thêm + Outlined -->
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style_test.css">
+</head>
+
+<body>
+    <!-- Bố cục hiển thị và nội dung chính của dashboard -->
+    <div class="grid-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="menu-icon" onclick="openSidebar()">
+                <!-- onclick dùng trong Javascript với chức năng đóng mỏ sidebar -->
+                <span class="material-icons-outlined">menu</span>
+            </div>
+            <div class="header-left">
+                <span class="material-icons-outlined">search</span>
+            </div>
+            <div class="header-right">
+                <span class="material-icons-outlined">notifications</span>
+                <span class="material-icons-outlined">email</span>
+                <span class="material-icons-outlined">account_circle</span>
+            </div>
+        </header>
+        <!-- End Header -->
+
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="sidebar-title">
+                <div class="sidebar-brand">
+                    <a href="dashboard.html">
+                        <span class="material-icons-outlined">lock</span>
+                        <p>SMART LOCK</p>
+                    </a>
+
+                </div>
+                <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+            </div>
+            <ul class="sidebar-list">
+                <li class="sidebar-list-item">
+                    <a href="dashboard.html">
+                        <span class="material-icons-outlined">dashboard</span> Dashboard
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="information.html">
+                        <span class="material-icons-outlined">info</span> Informations
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <!-- End Sidebar -->
+
+        <!-- Main -->
+        <main class="main-container">
+            <p>MAIN</p>
+        </main>
+        <!-- End Main -->
+    </div>
+
+    <!-- Custom JS -->
+    <script src="scripts_test.js"></script>
+</body>
+
+</html>
