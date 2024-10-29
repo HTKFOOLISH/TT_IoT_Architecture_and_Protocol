@@ -24,11 +24,11 @@ body {
     grid-area: header;
     height: 50px;
     display: flex;
-    background-color: rgb(153, 0, 219);
+    background-color: #9900db;
     align-items: center;
     justify-content: space-between;
     padding: 0 30px 0 30px;
-    box-shadow: 0 14px 7px -3px rgba(0, 0, 0, 0.85);
+    box-shadow: 0 14px 7px -3px #000000d9;
 }
 
 .menu-icon {
@@ -41,88 +41,87 @@ body {
 
 /* ------------------- SIDEBAR ------------------- */
 #sidebar {
-    grid-area: sidebar;
-    height: 100%;
-    background-color: rgba(85, 0, 122, 0.85);
-    overflow-y: auto;
-    transition: all 0.5s;
-    -webkit-transition: all 0.5s;
+    grid-area: sidebar; /* Xác định khu vực lưới cho sidebar */
+    height: 100%; /* Chiều cao của sidebar chiếm 100% chiều cao của phần chứa */
+    background-color: #55007ad9; /* Màu nền cho sidebar */
+    overflow-y: auto; /* Thêm thanh cuộn dọc nếu nội dung vượt quá chiều cao */
+    transition: all 0.5s; /* Thêm hiệu ứng chuyển tiếp cho tất cả các thuộc tính trong 0.5 giây */
+    -webkit-transition: all 0.5s; /* Hỗ trợ cho các trình duyệt Webkit */
 }
 
 .sidebar-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 20px 20px 20px;
-    margin-bottom: 30px;
+    display: flex; /* Sử dụng flexbox để sắp xếp các phần tử con */
+    justify-content: space-between; /* Căn giữa các phần tử, tạo khoảng cách giữa chúng */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    padding: 20px; /* Khoảng cách bên trong cho sidebar-title */
+    margin-bottom: 30px; /* Khoảng cách bên dưới cho sidebar-title */
 }
 
 .sidebar-title > span {
-    display: none;
+    display: none; /* Ẩn các phần tử <span> trực tiếp bên trong sidebar-title */
 } /* Dấu > ở trên để tác dụng các span nằm ngay phía trong còn trong nữa thì không tác dụng. */
 
 .sidebar-brand {
-    margin-top: 15px;
-    font-size: 25px;
-    font-weight: 800;
-    color: black;
+    margin-top: 15px; /* Khoảng cách bên trên cho sidebar-brand */
+    font-size: 25px; /* Kích thước chữ cho tên thương hiệu */
+    font-weight: 800; /* Độ đậm của chữ */
+    color: black; /* Màu chữ cho tên thương hiệu */
 }
 
 .sidebar-brand .material-icons-outlined {
-    font-size: 60px;
-    display: flex;
-    justify-content: center;
+    font-size: 60px; /* Kích thước biểu tượng trong sidebar-brand */
+    display: flex; /* Sử dụng flexbox để căn giữa biểu tượng */
+    justify-content: center; /* Căn giữa biểu tượng theo chiều ngang */
 }
 
 a {
-    text-decoration: none;
-    color: #000000;
+    text-decoration: none; /* Xóa gạch chân của liên kết */
+    color: #000000; /* Màu chữ cho liên kết */
 }
 
 a:hover {
-    color: #ffffffb1;
+    color: #ffffffb1; /* Màu chữ khi di chuột qua liên kết */
 }
 
 a:active {
-    opacity: 0.5;
+    opacity: 0.5; /* Độ mờ cho liên kết khi được nhấp */
 }
 
 .sidebar-list {
-    padding: 0;
-    margin-top: 15px;
-    list-style-type: none; /* làm mất dấu đầu dòng của list */
+    padding: 0; /* Xóa khoảng cách bên trong cho danh sách sidebar */
+    margin-top: 15px; /* Khoảng cách bên trên cho danh sách sidebar */
+    list-style-type: none; /* Làm mất dấu đầu dòng của danh sách */
 }
 
 .sidebar-list-item {
-    padding: 20px 20px 20px 20px;
-    font-size: 20px;
+    padding: 20px; /* Khoảng cách bên trong cho từng mục danh sách */
+    font-size: 20px; /* Kích thước chữ cho từng mục danh sách */
 }
 
 .sidebar-list-item:hover {
-    background-color: rgba(85, 0, 122, 0.85);
-    border-radius: 40px;
-    font-weight: 550;
-    color: #ffffffb1;
-    cursor: pointer;
+    background-color: #55007ad9; /* Màu nền khi di chuột qua từng mục danh sách */
+    border-radius: 40px; /* Bo tròn góc cho nền mục danh sách */
+    font-weight: 550; /* Độ đậm của chữ khi di chuột qua */
+    color: #ffffffb1; /* Màu chữ khi di chuột qua */
+    cursor: pointer; /* Hiển thị con trỏ chuột như một con trỏ nhấp */
 }
 
 .sidebar-list-item:active {
-    opacity: 0.5;
+    opacity: 0.5; /* Độ mờ cho mục danh sách khi được nhấp */
 }
 
 .sidebar-responsive {
-    display: inline !important;
-    position: absolute;
-    z-index: 12 !important;
+    display: inline !important; /* Hiển thị dưới dạng inline, ưu tiên hiển thị này */
+    position: absolute; /* Vị trí tuyệt đối cho phần sidebar-responsive */
+    z-index: 12 !important; /* Đặt độ ưu tiên hiển thị cho phần sidebar-responsive */
 }
 
 /* ------------------- MAIN ------------------- */
 .main-container {
     grid-area: main;
-    background-color: rgba(153, 0, 219, 0.6);
+    background-color: #9900db99;
     overflow-y: auto;
     padding: 20px 20px;
-    color: rgba(255, 255, 255, 255, 0.95);
 }
 
 .date-time-container {
@@ -202,15 +201,15 @@ a:active {
     box-sizing: border-box;
     -webkit-column-break-inside: avoid;
     border-radius: 5px;
-    box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 7px -4px #00000033;
 }
 
-.devices-card > span {
+.devices-card span {
     display: flex;
     justify-content: space-around;
 }
 
-.devices-card > .material-icons-outlined {
+.devices-card .material-icons-outlined {
     font-size: 50px;
 }
 
@@ -241,7 +240,7 @@ a:active {
     box-sizing: border-box;
     -webkit-column-break-inside: avoid;
     border-radius: 5px;
-    box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 7px -4px #00000033;
 }
 
 .sensors-card > span {
@@ -263,10 +262,6 @@ a:active {
     justify-content: center;
 }
 
-.face-status {
-    display: none;
-}
-
 /* ------------------- Setting members container ------------------- */
 
 .members-container {
@@ -277,13 +272,13 @@ a:active {
 }
 
 .members-card {
-    background-color: rgba(153, 0, 219, 0.6);
+    background-color: #9900db99;
     margin-bottom: 20px;
     padding: 5px;
     box-sizing: border-box;
     -webkit-column-break-inside: avoid;
     border-radius: 5px;
-    box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 7px -4px #00000033;
 }
 
 .members-card > span {
@@ -315,7 +310,7 @@ img {
 /* ------------------- Chart ------------------- */
 .charts {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 20px;
 }
 
@@ -327,7 +322,7 @@ img {
     -webkit-column-break-inside: avoid;
     border: 1px solid #d2d2d3;
     border-radius: 5px;
-    box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 7px -4px #00000033;
 }
 
 .chart-title {

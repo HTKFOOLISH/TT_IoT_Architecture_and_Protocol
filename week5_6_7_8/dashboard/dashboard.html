@@ -39,30 +39,36 @@
 
         <!-- Sidebar -->
         <aside id="sidebar">
+            <!-- Tiêu đề của sidebar -->
             <div class="sidebar-title">
                 <div class="sidebar-brand">
+                    <!-- Liên kết đến trang dashboard -->
                     <a href="dashboard.html">
-                        <span class="material-icons-outlined">lock</span>
-                        <p>SMART LOCK</p>
+                        <span class="material-icons-outlined">lock</span> <!-- Biểu tượng khóa -->
+                        <p>SMART LOCK</p> <!-- Tên ứng dụng -->
                     </a>
-
                 </div>
+                <!-- Biểu tượng đóng sidebar, gọi hàm closeSidebar khi nhấp vào -->
                 <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
             </div>
+            <!-- Danh sách các mục trong sidebar -->
             <ul class="sidebar-list">
                 <li class="sidebar-list-item">
+                    <!-- Liên kết đến trang dashboard -->
                     <a href="dashboard.html">
-                        <span class="material-icons-outlined">dashboard</span> Dashboard
+                        <span class="material-icons-outlined">dashboard</span> Dashboard <!-- Biểu tượng và tên mục -->
                     </a>
                 </li>
                 <li class="sidebar-list-item">
+                    <!-- Liên kết đến trang thông tin -->
                     <a href="information.html"> <!-- Tạo thêm file information.html -->
-                        <span class="material-icons-outlined">info</span> Informations
+                        <span class="material-icons-outlined">info</span> Informations <!-- Biểu tượng và tên mục -->
                     </a>
                 </li>
             </ul>
         </aside>
         <!-- End Sidebar -->
+
 
         <!-- Main -->
         <main class="main-container">
@@ -94,51 +100,48 @@
             </div>
 
             <div class="devices-container" style="display: none;">
-                <div class="devices-card" onclick="status(this)">
+                <div class="devices-card" onclick="status(this, 'lock')">
                     <h2 class="devices-title">LOCK DEVICE</h2>
                     <span class="material-icons-outlined">lock</span>
-                    <h1 class="status">OFF</h1>
+                    <h1 class="status" id="lock">OFF</h1>
                 </div>
-                <div class="devices-card" onclick="status(this)">
+                <div class="devices-card" onclick="status(this, 'light')">
                     <h2 class="devices-title">LIGHT DEVICE</h2>
                     <span class="material-icons-outlined">lightbulb</span>
-                    <h1 class="status">OFF</h1>
+                    <h1 class="status" id="light">OFF</h1>
                 </div>
-                <div class="devices-card" onclick="status(this)">
+                <div class="devices-card" onclick="status(this, 'alerts')">
                     <h2 class="devices-title">ALERTS DEVICE</h2>
                     <span class="material-icons-outlined">notification_important</span>
-                    <h1 class="status">OFF</h1>
+                    <h1 class="status" id="alert">OFF</h1>
                 </div>
             </div>
 
             <div class="sensors-container" style="display: none;">
-                <div class="sensors-card" onclick="status(this)">
+                <div class="sensors-card" onclick="status(this, 'sensor1')">
                     <h2 class="sensors-title">FINGERPRINT SENSOR</h2>
                     <span class="material-icons-outlined">fingerprint</span>
-                    <h1 class="status">OFF</h1>
+                    <h1 class="status" id="sensor1">OFF</h1>
                 </div>
-                <div class="sensors-card" onclick="status(this)">
+                <div class="sensors-card" onclick="status(this, 'sensor2')">
                     <h2 class="sensors-title">MAGNETIC CARD SENSOR</h2>
                     <span class="material-icons-outlined">pin</span>
-                    <h1 class="status">OFF</h1>
+                    <h1 class="status" id="sensor2">OFF</h1>
                 </div>
-                <div class="sensors-card" onclick="status(this)">
+                <div class="sensors-card" onclick="status(this, 'sensor3')">
                     <h2 class="sensors-title">MOVEMENT SENSOR</h2>
                     <span class="material-icons-outlined">person_pin</span>
-                    <h1 class="status">OFF</h1>
+                    <h1 class="status" id="sensor3">OFF</h1>
                 </div>
             </div>
 
             <!-- Charts -->
             <div class="charts">
                 <div class="charts-card">
-                    <p class="chart-title">Devices</p>
-                    <div id="chart1"></div>
+                    <p class="chart-title">Lock Status Realtime</p>
+                    <div id="chart"></div>
                 </div>
-                <div class="charts-card">
-                    <p class="chart-title">Sensors</p>
-                    <div id="chart2"></div>
-                </div>
+
             </div>
         </main>
         <!-- End Main -->
@@ -146,148 +149,11 @@
     </div>
 
     <!-- ApexCharts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-    <!-- Firebase: Real time database -->
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics.js";
-        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDtbyt7uGp5k-62BKZ_efJ5zhYMoCweZSY",
-            authDomain: "smart-lock-project-9b50b.firebaseapp.com",
-            databaseURL: "https://smart-lock-project-9b50b-default-rtdb.firebaseio.com",
-            projectId: "smart-lock-project-9b50b",
-            storageBucket: "smart-lock-project-9b50b.appspot.com",
-            messagingSenderId: "830294056108",
-            appId: "1:830294056108:web:edf2cb0dd7931488b9d309",
-            measurementId: "G-V89KMGWYG5"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getDatabase(); // Initialize database
-
-        // Function to write device data to database
-        function writeDeviceData(deviceName, status) {
-            set(ref(db, 'devices/' + deviceName), {
-                status: status // Write device status
-            }).then(() => {
-                console.log('Device data saved successfully!'); // Success message
-            }).catch((error) => {
-                console.error('Error saving device data: ', error); // Error message
-            });
-        }
-
-        // Function to read device data from database
-        function readDeviceData(deviceName) {
-            const dbRef = ref(db); // Create a reference to the database
-
-            get(child(dbRef, 'devices/' + deviceName)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    console.log('Device status: ', snapshot.val().status); // Log device status
-                    // Update UI if needed
-                    const deviceElement = [...document.querySelectorAll('.devices-title')].find(element => element.innerText === deviceName.toUpperCase());
-                    if (deviceElement) {
-                        const statusElement = deviceElement.closest('.devices-card').querySelector('.status');
-                        statusElement.innerText = snapshot.val().status; // Update status
-                    }
-                } else {
-                    console.log('No device data available'); // If no data
-                }
-            }).catch((error) => {
-                console.error('Error getting device data: ', error); // Error message
-            });
-        }
-
-        // Function to write sensor data to database
-        function writeSensorData(sensorName, status) {
-            set(ref(db, 'sensors/' + sensorName), {
-                status: status // Write sensor status
-            }).then(() => {
-                console.log('Sensor data saved successfully!'); // Success message
-            }).catch((error) => {
-                console.error('Error saving sensor data: ', error); // Error message
-            });
-        }
-
-        // Function to read sensor data from database
-        function readSensorData(sensorName) {
-            const dbRef = ref(db); // Create a reference to the database
-
-            get(child(dbRef, 'sensors/' + sensorName)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    console.log('Sensor status: ', snapshot.val().status); // Log sensor status
-                    // Update UI if needed
-                    const sensorElement = [...document.querySelectorAll('.sensors-title')].find(element => element.innerText === sensorName.toUpperCase());
-                    if (sensorElement) {
-                        const statusElement = sensorElement.closest('.sensors-card').querySelector('.status');
-                        statusElement.innerText = snapshot.val().status; // Update status
-                    }
-                } else {
-                    console.log('No sensor data available'); // If no data
-                }
-            }).catch((error) => {
-                console.error('Error getting sensor data: ', error); // Error message
-            });
-        }
-
-        // Function to handle device status change when clicked
-        function deviceStatus(element) {
-            const deviceName = element.querySelector('.devices-title').innerText.toLowerCase().replace(' ', '');
-            const currentStatus = element.querySelector('.status').innerText;
-
-            // Toggle status from ON to OFF and vice versa
-            const newStatus = currentStatus === 'OFF' ? 'ON' : 'OFF';
-            element.querySelector('.status').innerText = newStatus; // Update status on UI
-
-            // Write new status to database
-            writeDeviceData(deviceName, newStatus);
-        }
-
-        // Function to handle sensor status change when clicked
-        function sensorStatus(element) {
-            const sensorName = element.querySelector('.sensors-title').innerText.toLowerCase().replace(' ', '');
-            const currentStatus = element.querySelector('.status').innerText;
-
-            // Toggle status from ON to OFF and vice versa
-            const newStatus = currentStatus === 'OFF' ? 'ON' : 'OFF';
-            element.querySelector('.status').innerText = newStatus; // Update status on UI
-
-            // Write new status to database
-            writeSensorData(sensorName, newStatus);
-        }
-
-        // Assign event listeners to device cards
-        document.querySelectorAll('.devices-card').forEach(card => {
-            card.addEventListener('click', () => deviceStatus(card));
-        });
-
-        // Assign event listeners to sensor cards
-        document.querySelectorAll('.sensors-card').forEach(card => {
-            card.addEventListener('click', () => sensorStatus(card));
-        });
-
-        // Load data when the page loads
-        window.onload = () => {
-            // Read data for devices
-            readDeviceData('LOCK DEVICE');
-            readDeviceData('LIGHT DEVICE');
-            readDeviceData('ALERTS DEVICE');
-
-            // Read data for sensors
-            readSensorData('FINGERPRINT SENSOR');
-            readSensorData('MAGNETIC CARD SENSOR');
-            readSensorData('MOVEMENT SENSOR');
-            readSensorData('TEMPERATURE SENSOR');
-            readSensorData('HUMIDITY SENSOR');
-        };
-    </script>
-
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <!-- Custom JS -->
     <script src="js/scripts.js"></script>

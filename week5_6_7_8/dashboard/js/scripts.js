@@ -21,19 +21,6 @@ function closeSidebar() {
 // Display Device Status
 let islocked = false;
 
-function status(card) {
-    const statusElement = card.querySelector(".status"); // Lấy thẻ h1 bên trong thẻ div.device-card
-
-    // Chuyển đổi trạng thái
-    if (!islocked) {
-        statusElement.textContent = "ON";
-        islocked = true;
-    } else {
-        statusElement.textContent = "OFF";
-        islocked = false;
-    }
-}
-
 // Display devices
 function displayDevice() {
     // Get container of devices-card
@@ -81,179 +68,200 @@ function displayMembers() {
 
 /* ------------------- CHART ------------------- */
 
+// Khởi tạo trạng thái và dữ liệu cho khóa
+let lockStatus = 0; // 0: Unlocked, 1: Locked
+let lockDataArray = JSON.parse(localStorage.getItem('lockData')) || []; // Lấy dữ liệu từ localStorage hoặc khởi tạo mảng rỗng
+let timeLabels = JSON.parse(localStorage.getItem('timeLabels')) || []; // Lấy nhãn thời gian từ localStorage
+
 var options = {
-    // Dữ liệu cho biểu đồ (series chứa các tập dữ liệu)
-    series: [
-    {
-      name: "High - 2013", // Lượng điện năng cao trong năm 2013
-      data: [28, 29, 33, 36, 32, 32, 33] // Giá trị nhiệt độ cao theo từng tháng
+    series: [{
+        name: "lock status",
+        data: lockDataArray.map((status, index) => [timeLabels[index], status]) // Sử dụng dữ liệu đã khôi phục
+    }],
+    chart: {
+        height: 350,
+        type: 'line',
+        zoom: {
+            enabled: true, // Kích hoạt tính năng thu phóng
+            type: 'x', // Chỉ thu phóng theo trục X (thời gian)
+            autoScaleYaxis: true // Tự động điều chỉnh trục Y khi thu phóng
+        },
+        toolbar: {
+            autoSelected: 'zoom', // Tự động chọn công cụ thu phóng
+            tools: {
+                zoom: true,
+                zoomin: true,
+                zoomout: true,
+                pan: true, // Cho phép kéo để di chuyển biểu đồ
+                reset: true // Thêm nút để đặt lại thu phóng
+            }
+        }
     },
-    {
-      name: "Low - 2013", // Nhiệt độ thấp trong năm 2013
-      data: [12, 11, 14, 18, 17, 13, 13] // Giá trị nhiệt độ thấp theo từng tháng
-    }
-  ],
-  
-  // Cấu hình chung cho biểu đồ
-  chart: {
-    height: 350, // Chiều cao biểu đồ là 350px
-    type: 'line', // Loại biểu đồ là đường (line chart)
-
-    // Hiệu ứng bóng đổ cho các đường biểu đồ
-    dropShadow: {
-      enabled: true, // Kích hoạt bóng đổ
-      color: '#000', // Màu bóng là đen
-      top: 18, // Vị trí từ trên xuống (18px)
-      left: 7, // Vị trí từ trái sang (7px)
-      blur: 10, // Độ mờ của bóng
-      opacity: 0.2 // Độ trong suốt của bóng (20%)
+    dataLabels: {
+        enabled: false
     },
-    zoom: {
-      enabled: false // Tắt chức năng zoom của biểu đồ
+    stroke: {
+        curve: 'stepline'
     },
-    toolbar: {
-      show: false // Ẩn toolbar của biểu đồ
-    }
-  },
-
-  // Màu cho các đường dữ liệu
-  colors: ['#77B6EA', '#545454'], // Màu xanh nhạt cho nhiệt độ cao và màu xám cho nhiệt độ thấp
-
-  // Hiển thị nhãn giá trị trên các điểm dữ liệu
-  dataLabels: {
-    enabled: true, // Kích hoạt nhãn dữ liệu
-  },
-
-  // Kiểu đường biểu đồ là cong mềm
-  stroke: {
-    curve: 'smooth' // Đường cong mượt
-  },
-
-  // Tiêu đề của biểu đồ
-  title: {
-    text: 'Average high and low power consumption', // Tiêu đề biểu đồ
-    align: 'left' // Căn lề trái cho tiêu đề
-  },
-
-  // Cấu hình lưới của biểu đồ
-  grid: {
-    borderColor: '#e7e7e7', // Màu đường biên của lưới
-    row: {
-      colors: ['#f3f3f3', 'transparent'], // Màu xen kẽ cho các hàng trong lưới
-      opacity: 0.5 // Độ trong suốt của lưới
-    },
-  },
-
-  // Kích thước các điểm trên biểu đồ
-  markers: {
-    size: 1 // Kích thước điểm đánh dấu là 1px
-  },
-
-  // Cấu hình trục X
-  xaxis: {
-    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'], // Các tháng trên trục X
     title: {
-      text: 'Month' // Tiêu đề của trục X là "Month"
-    }
-  },
-
-  // Cấu hình trục Y
-  yaxis: {
-    title: {
-      text: 'Power Consumption' // Tiêu đề của trục Y là "power consumption"
+        text: 'Lock Opening/Closing Time',
+        align: 'left'
     },
-    min: 5, // Giá trị nhỏ nhất trên trục Y là 5
-    max: 40 // Giá trị lớn nhất trên trục Y là 40
-  },
-
-  // Cấu hình chú giải (legend)
-  legend: {
-    position: 'top', // Vị trí của chú giải ở trên cùng
-    horizontalAlign: 'right', // Căn phải chú giải
-    floating: true, // Chú giải có thể trôi nổi
-    offsetY: -25, // Điều chỉnh khoảng cách chú giải so với trục Y (-25px)
-    offsetX: -5 // Điều chỉnh khoảng cách chú giải so với trục X (-5px)
-  }
+    grid: {
+        row: {
+            colors: ['#f3f3f3', 'transparent'], // Takes an array which will be repeated on columns
+            opacity: 0.5
+        },
+    },
+    xaxis: {
+        type: 'datetime',
+        labels: {
+            formatter: function(value) {
+                return new Date(value).toLocaleString([], { 
+                    year: 'numeric', 
+                    month: '2-digit', 
+                    day: '2-digit', 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+            }
+        }
+    }
 };
 
-// Khởi tạo biểu đồ với các tùy chọn đã định nghĩa
-var chart = new ApexCharts(document.querySelector("#chart1"), options);
-
-// Render (vẽ) biểu đồ lên phần tử HTML có id là "chart"
+var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 
+// Hàm xử lý sự kiện nhấp chuột
+function status(element, deviceType) {
+    const statusElement = element.querySelector('.status');
 
-  var options2 = {
-    series: [
-    {
-      name: "High - 2013",
-      data: [28, 29, 33, 36, 32, 32, 33]
-    },
-    {
-      name: "Low - 2013",
-      data: [12, 11, 14, 18, 17, 13, 13]
-    }
-  ],
-    chart: {
-    height: 350,
-    type: 'line',
-    dropShadow: {
-      enabled: true,
-      color: '#000',
-      top: 18,
-      left: 7,
-      blur: 10,
-      opacity: 0.2
-    },
-    zoom: {
-      enabled: false
-    },
-    toolbar: {
-      show: false
-    }
-  },
-  colors: ['#77B6EA', '#545454'],
-  dataLabels: {
-    enabled: true,
-  },
-  stroke: {
-    curve: 'smooth'
-  },
-  title: {
-    text: 'Average High & Low power consumption',
-    align: 'left'
-  },
-  grid: {
-    borderColor: '#e7e7e7',
-    row: {
-      colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-      opacity: 0.5
-    },
-  },
-  markers: {
-    size: 1
-  },
-  xaxis: {
-    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-    title: {
-      text: 'Month'
-    }
-  },
-  yaxis: {
-    title: {
-      text: 'Power Consumption'
-    },
-    min: 5,
-    max: 40
-  },
-  legend: {
-    position: 'top',
-    horizontalAlign: 'right',
-    floating: true,
-    offsetY: -25,
-    offsetX: -5
-  }
-  };
+    if (deviceType === 'lock') {
+        // Đảo ngược trạng thái
+        lockStatus = lockStatus === 0 ? 1 : 0;
+        statusElement.textContent = lockStatus === 1 ? 'ON' : 'OFF'; // Cập nhật văn bản hiển thị
 
-  var chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
-  chart2.render();
+        // Thêm trạng thái mới vào mảng dữ liệu
+        lockDataArray.push(lockStatus);
+
+        // Thêm nhãn thời gian
+        const currentTime = new Date();
+        timeLabels.push(currentTime.getTime());
+
+        // Cập nhật dữ liệu cho biểu đồ
+        chart.updateSeries([{
+            name: "lock status",
+            data: lockDataArray.map((status, index) => [timeLabels[index], status])
+        }]);
+
+        // Lưu trữ dữ liệu vào localStorage
+        localStorage.setItem('lockData', JSON.stringify(lockDataArray));
+        localStorage.setItem('timeLabels', JSON.stringify(timeLabels));
+    }
+}
+
+// ------------------- FIREBASE -------------------
+
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyDtbyt7uGp5k-62BKZ_efJ5zhYMoCweZSY",
+    authDomain: "smart-lock-project-9b50b.firebaseapp.com",
+    databaseURL: "https://smart-lock-project-9b50b-default-rtdb.firebaseio.com",
+    projectId: "smart-lock-project-9b50b",
+    storageBucket: "smart-lock-project-9b50b.appspot.com",
+    messagingSenderId: "830294056108",
+    appId: "1:830294056108:web:edf2cb0dd7931488b9d309",
+    measurementId: "G-V89KMGWYG5"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Write data to Firebase
+const lock = document.getElementById('lock');
+const light = document.getElementById('light');
+const alert = document.getElementById('alert');
+
+let lockVal = lock.innerText;
+lock.onclick = function() {
+    lockVal = lockVal === 'OFF' ? 'ON' : 'OFF';
+    lock.innerHTML = lockVal;
+
+    database.ref("/devices").update({
+        "lock" : lockVal === 'OFF' ? 0 : 1
+    })
+}
+
+let lightVal = light.innerText;
+light.onclick = function() {
+    lightVal = lightVal === 'OFF' ? 'ON' : 'OFF';
+    light.innerHTML = lightVal;
+
+    database.ref("/devices").update({
+        "light" : lightVal === 'OFF' ? 0 : 1
+    })
+}
+
+let alertVal = alert.innerText;
+alert.onclick = function() {
+    alertVal = alertVal === 'OFF' ? 'ON' : 'OFF';
+    alert.innerText = alertVal;
+
+    database.ref("/devices").update({
+        "alert" : alertVal === 'OFF' ? 0 : 1
+    })
+}
+
+const sensor1 = document.getElementById('sensor1');
+const sensor2 = document.getElementById('sensor2');
+const sensor3 = document.getElementById('sensor3');
+
+let sensor1Val = sensor1.innerText;
+sensor1.onclick = function() {
+    sensor1Val = sensor1Val === 'OFF' ? 'ON' : 'OFF';
+    sensor1.innerText = sensor1Val;
+
+    database.ref("/sensors").update({
+        "fingerprint" : sensor1Val === 'OFF' ? 0 : 1
+    })
+}
+
+let sensor2Val = sensor2.innerText;
+sensor2.onclick = function() {
+    sensor2Val = sensor2Val === 'OFF' ? 'ON' : 'OFF';
+    sensor2.innerText = sensor2Val;
+
+    database.ref("/sensors").update({
+        "magnetic card" : sensor2Val === 'OFF' ? 0 : 1
+    })
+}
+
+let sensor3Val = sensor3.innerText;
+sensor3.onclick = function() {
+    sensor3Val = sensor3Val === 'OFF' ? 'ON' : 'OFF';
+    sensor3.innerText = sensor3Val;
+
+    database.ref("/sensors").update({
+        "movement" : sensor3Val === 'OFF' ? 0 : 1
+    })
+}
+
+// Read data from Firebase
+database.ref("/devices").on("value", function(snapshot) {
+    let devices = snapshot.val();
+    devices["lock"] === 1 ? lock.innerText = 'ON' : lock.innerText = 'OFF';
+    devices["light"] === 1 ? light.innerText = 'ON' : light.innerText = 'OFF';
+    devices["alert"] === 1 ? alert.innerText = 'ON' : alert.innerText = 'OFF';
+})
+
+database.ref("/sensors").on("value", function(snapshot) {
+    let sensors = snapshot.val();
+
+    sensors["fingerprint"] === 1 ? sensor1.innerText = 'ON' : sensor1.innerText = 'OFF';
+    sensors["magnetic card"] === 1 ? sensor2.innerText = 'ON' : sensor2.innerText = 'OFF';
+    sensors["movement"] === 1 ? sensor3.innerText = 'ON' : sensor3.innerText = 'OFF';
+})
