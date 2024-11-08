@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"> <!-- định dạng kí tự -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- hiển thị toàn phù hợp với màn hình máy tính, điện thoại, máy tính bảng, ... -->
+    <title>Smart Lock</title>
+
+    <!-- Gowun Batang Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- đường link thêm + Outlined -->
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="grid-container">
+
+        <!-- Header -->
+        <header class="header">
+            <!-- <div class="menu-icon" onclick="openSidebar()">
+                <span class="material-icons-outlined">menu</span>
+            </div>
+            <div class="header-left">
+                <span class="material-icons-outlined">search</span>
+            </div>
+            <div class="header-right">
+                <span class="material-icons-outlined">notifications</span>
+                <span class="material-icons-outlined">email</span>
+                <span class="material-icons-outlined">account_circle</span>
+            </div> -->
+            <h1>Smart Lock</h1>
+        </header>
+        <!-- End Header -->
+
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <!-- Tiêu đề của sidebar -->
+            <div class="sidebar-title">
+                <div class="sidebar-brand">
+                    <!-- Liên kết đến trang dashboard -->
+                    <a href="dashboard.html">
+                        <span class="material-icons-outlined">lock</span> <!-- Biểu tượng khóa -->
+                        <p>SMART LOCK</p> <!-- Tên ứng dụng -->
+                    </a>
+                </div>
+                <!-- Biểu tượng đóng sidebar, gọi hàm closeSidebar khi nhấp vào -->
+                <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+            </div>
+            <!-- Danh sách các mục trong sidebar -->
+
+        </aside>
+        <!-- End Sidebar -->
+
+
+        <!-- Main -->
+        <main class="main-container">
+            <div class="main-cards">
+                <div class="card" onclick="displayDevice()">
+                    <div class="card-inner">
+                        <h3>DEVICES</h3>
+                        <span class="material-icons-outlined">devices</span>
+                    </div>
+                    <h1>03</h1>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts">
+                    <div class="charts-card">
+                        <p class="chart-title">Lock Status Realtime</p>
+                        <div id="chart"></div>
+                    </div>
+                </div>
+
+                <div class="card" onclick="displaySensors()">
+                    <div class="card-inner">
+                        <h3>SENSORS</h3>
+                        <span class="material-icons-outlined">sensors</span>
+                    </div>
+                    <h1>03</h1>
+                </div>
+                <div class="main-title">
+                    <!-- <h2>INFORMATIONS</h2> -->
+                </div>
+                <div class="card" onclick="displayMembers()">
+                    <div class="card-inner">
+                        <h3>MEMBERS</h3>
+                        <span class="material-icons-outlined">groups</span>
+                    </div>
+                    <h1>02</h1>
+                </div>
+            </div>
+
+            <div class="devices-container" style="display: none;">
+                <div class="devices-card" onclick="status(this, 'lock')">
+                    <h2 class="devices-title">LOCK DEVICE</h2>
+                    <span class="material-icons-outlined">lock</span>
+                    <h1 class="status" id="lock">OFF</h1>
+                </div>
+                <div class="devices-card" onclick="status(this, 'light')">
+                    <h2 class="devices-title">LIGHT DEVICE</h2>
+                    <span class="material-icons-outlined">lightbulb</span>
+                    <h1 class="status" id="light">OFF</h1>
+                </div>
+                <div class="devices-card" onclick="status(this, 'alerts')">
+                    <h2 class="devices-title">ALERTS DEVICE</h2>
+                    <span class="material-icons-outlined">notification_important</span>
+                    <h1 class="status" id="alert">OFF</h1>
+                </div>
+            </div>
+
+            <div class="sensors-container" style="display: none;">
+                <div class="sensors-card" onclick="status(this, 'sensor1')">
+                    <h2 class="sensors-title">FINGERPRINT SENSOR</h2>
+                    <span class="material-icons-outlined">fingerprint</span>
+                    <h1 class="status" id="sensor1">OFF</h1>
+                </div>
+                <div class="sensors-card" onclick="status(this, 'sensor2')">
+                    <h2 class="sensors-title">MAGNETIC CARD SENSOR</h2>
+                    <span class="material-icons-outlined">pin</span>
+                    <h1 class="status" id="sensor2">OFF</h1>
+                </div>
+                <div class="sensors-card" onclick="status(this, 'sensor3')">
+                    <h2 class="sensors-title">MOVEMENT SENSOR</h2>
+                    <span class="material-icons-outlined">person_pin</span>
+                    <h1 class="status" id="sensor3">OFF</h1>
+                </div>
+            </div>
+
+            <div class="members-container" style="display: none;">
+                <div class="members-card">
+                    <div class="members-title">
+                        <h1>Huỳnh Thiện Khải</h1>
+                    </div>
+                    <img src="img/Khải.jpg" alt="Huỳnh Thiện Khải - 22139032">
+                    <h1>MSSV: 22139032</h1>
+                </div>
+                <div class="members-card">
+                    <div class="members-title">
+                        <h1>Đỗ Bình Nguyên</h1>
+                    </div>
+                    <img src="img/Nguyên.jpg" alt="Đỗ Bình Nguyên - 22139046">
+                    <h1>MSSV: 22139046</h1>
+                </div>
+            </div>
+
+            <!-- <br><br><br><br><br> -->
+
+            <div class="date-time-container">
+                <div id="real-time">
+                </div>
+                <div id="date"></div>
+                <script src="js/date_time.js"></script>
+            </div>
+        </main>
+        <!-- End Main -->
+
+    </div>
+
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/scripts.js"></script>
+</body>
+
+</html>

@@ -251,15 +251,19 @@ sensor3.onclick = function() {
 }
 
 // Read data from Firebase
+// Đọc dữ liệu từ Firebase Realtime Database cho các thiết bị
 database.ref("/devices").on("value", function(snapshot) {
-    let devices = snapshot.val();
-    devices["lock"] === 1 ? lock.innerText = 'ON' : lock.innerText = 'OFF';
-    devices["light"] === 1 ? light.innerText = 'ON' : light.innerText = 'OFF';
-    devices["alert"] === 1 ? alert.innerText = 'ON' : alert.innerText = 'OFF';
+    let devices = snapshot.val(); // Lấy giá trị hiện tại của các thiết bị từ Firebase
+    
+    // Cập nhật trạng thái của từng thiết bị dựa trên dữ liệu từ Firebase
+    devices["lock"] === 1 ? lock.innerText = 'ON' : lock.innerText = 'OFF'; // Kiểm tra và gán trạng thái của khóa
+    devices["light"] === 1 ? light.innerText = 'ON' : light.innerText = 'OFF'; // Kiểm tra và gán trạng thái của đèn
+    devices["alert"] === 1 ? alert.innerText = 'ON' : alert.innerText = 'OFF'; // Kiểm tra và gán trạng thái của cảnh báo
 })
 
+// Đọc dữ liệu từ Firebase Realtime Database cho các sensors
 database.ref("/sensors").on("value", function(snapshot) {
-    let sensors = snapshot.val();
+    let sensors = snapshot.val(); // Lấy giá trị hiện tại của các sensors từ Firebase
 
     sensors["fingerprint"] === 1 ? sensor1.innerText = 'ON' : sensor1.innerText = 'OFF';
     sensors["magnetic card"] === 1 ? sensor2.innerText = 'ON' : sensor2.innerText = 'OFF';
