@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 Chỉnh sửa lại dashboard theo yêu cầu
+=======
+Chỉnh sửa lại dashboard theo yêu cầu
+>>>>>>> 5f5afb312fe0d0c571890ecb0c8533071b9805f1
