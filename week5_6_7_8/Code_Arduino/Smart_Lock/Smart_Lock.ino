@@ -1,43 +1,56 @@
+#include <WiFi.h>
 #include <Adafruit_Fingerprint.h>
 #include <SPI.h>
 #include <MFRC522.h>
+#include <FirebaseESP32.h>
 
-// Pin definitions for relay, lights, buzzer, and motion sensor
+// Wi-Fi credentials
+const char* ssid = "Be Kind P403";
+const char* password = "bekindp4033";
+
+// Firebase configuration
+#define FIREBASE_HOST "smartlock-684eb.firebaseio.com"
+#define FIREBASE_AUTH "WOfqX0Sbf5BlGa55bEU07ux9SwngtlW8S2ycukay"
+
+FirebaseData firebaseData; // Firebase data object
+
+// Pin definitions
 #define RELAY_PIN 4
 #define LIGHT_PIN 25
 #define BUZZER_PIN 26
-#define PIR_PIN 15       // Chân OUT của SR501 (motion sensor)
-#define MOTION_LED_PIN 2 // LED bật khi phát hiện chuyển động
+#define PIR_PIN 15
+#define MOTION_LED_PIN 2
 
 // RFID Pin definitions
 #define RST_PIN 22
 #define SDA_PIN 21
+byte validUID[4] = {0x13, 0xE5, 0x38, 0x2D};
 
-// RFID valid UID
-byte validUID[4] = {0x13, 0xE5, 0x38, 0x2D}; // UID hợp lệ
-
-// Setup fingerprint sensor
+// Fingerprint sensor pins
 #define MODEM_RX 16
 #define MODEM_TX 17
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial2);
 
-// Setup RFID reader
+// RFID reader
 MFRC522 rfid(SDA_PIN, RST_PIN);
 
 void setup() {
-  // Start serial communication
   Serial.begin(9600);
-  while (!Serial);  // Ensure serial is ready
-  delay(100);
-  
+  while (!Serial);
+
+  // Connect to Wi-Fi
+  connectWiFi();
+
+  // Firebase initialization
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  Firebase.reconnectWiFi(true);
+
   // Initialize fingerprint sensor
-  Serial.println("Adafruit Fingerprint sensor enrollment");
   Serial2.begin(57600, SERIAL_8N1, MODEM_RX, MODEM_TX);
-  
   if (finger.verifyPassword()) {
-    Serial.println("Found fingerprint sensor!");
+    Serial.println("Fingerprint sensor ready.");
   } else {
-    Serial.println("Did not find fingerprint sensor :(");
+    Serial.println("Fingerprint sensor not found!");
     while (1) { delay(1); }
   }
 
@@ -45,107 +58,147 @@ void setup() {
   SPI.begin();
   rfid.PCD_Init();
 
-  // Setup pins
+  // Configure pins
   pinMode(RELAY_PIN, OUTPUT);
   pinMode(LIGHT_PIN, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(PIR_PIN, INPUT);
   pinMode(MOTION_LED_PIN, OUTPUT);
-  
+
+  // Set default pin states
   digitalWrite(RELAY_PIN, LOW);
   digitalWrite(LIGHT_PIN, LOW);
   digitalWrite(BUZZER_PIN, LOW);
-  
-  Serial.println("System Ready");
+
+  Serial.println("System initialized.");
 }
 
 void loop() {
-  // Handle motion detection (SR501)
+  // Handle motion detection
+  handleMotion();
+
+  // Handle fingerprint authentication
+  handleFingerprint();
+
+  // Handle RFID authentication
+  handleRFID();
+
+  delay(500);  // Delay for stability
+}
+
+void connectWiFi() {
+  Serial.print("Connecting to Wi-Fi: ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println();
+  Serial.print("Connected to Wi-Fi! IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void handleMotion() {
   int motionState = digitalRead(PIR_PIN);
   if (motionState == HIGH) {
-    digitalWrite(MOTION_LED_PIN, HIGH); // Turn on LED if motion detected
-    Serial.println("Motion Detected!");
+    digitalWrite(MOTION_LED_PIN, HIGH);
+    Firebase.setString(firebaseData, "/SystemStatus/Motion", "Detected");
+    Firebase.setString(firebaseData, "/SystemStatus/MotionLED", "ON");
+    Serial.println("Motion detected.");
   } else {
-    digitalWrite(MOTION_LED_PIN, LOW);  // Turn off LED if no motion
-    Serial.println("No Motion.");
+    digitalWrite(MOTION_LED_PIN, LOW);
+    Firebase.setString(firebaseData, "/SystemStatus/Motion", "None");
+    Firebase.setString(firebaseData, "/SystemStatus/MotionLED", "OFF");
+    Serial.println("No motion.");
   }
+}
 
-  // Check fingerprint for authentication
+void handleFingerprint() {
   int id = getFingerprintID();
   if (id != -1) {
-    Serial.print("Fingerprint verified with ID: ");
+    Serial.print("Fingerprint ID verified: ");
     Serial.println(id);
-    
-    // Activate relay and light for 5 seconds
+
+    Firebase.setString(firebaseData, "/SystemStatus/Fingerprint/Status", "Verified");
+    Firebase.setInt(firebaseData, "/SystemStatus/Fingerprint/ID", id);
+
     digitalWrite(RELAY_PIN, HIGH);
     digitalWrite(LIGHT_PIN, HIGH);
+    Firebase.setString(firebaseData, "/SystemStatus/Relay", "ON");
+    Firebase.setString(firebaseData, "/SystemStatus/Light", "ON");
+
     delay(5000);
-    
+
     digitalWrite(RELAY_PIN, LOW);
     digitalWrite(LIGHT_PIN, LOW);
-    Serial.println("Relay and light deactivated!");
+    Firebase.setString(firebaseData, "/SystemStatus/Relay", "OFF");
+    Firebase.setString(firebaseData, "/SystemStatus/Light", "OFF");
   } else {
-    Serial.println("Fingerprint not recognized or error!");
+    Firebase.setString(firebaseData, "/SystemStatus/Fingerprint/Status", "Not Verified");
+    Serial.println("Fingerprint not recognized.");
   }
+}
 
-  // Check RFID for access control
+void handleRFID() {
   if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
-    Serial.println("New card detected.");
-    
-    // Check if the card is valid
-    if (isValidCard()) {
-      Serial.println("Access Granted");
-      digitalWrite(LIGHT_PIN, HIGH);  // Turn on LED for valid card
-      digitalWrite(RELAY_PIN, HIGH);  // Activate relay to unlock
+    Serial.println("RFID card detected.");
 
-      delay(5000);  // Keep the relay active for 5 seconds
-      digitalWrite(LIGHT_PIN, LOW);  // Turn off LED
-      digitalWrite(RELAY_PIN, LOW);  // Deactivate relay
+    String uid = "";
+    for (byte i = 0; i < 4; i++) {
+      uid += String(rfid.uid.uidByte[i], HEX);
+      if (i < 3) uid += " ";
+    }
+    Firebase.setString(firebaseData, "/SystemStatus/RFID/UID", uid);
+
+    if (isValidCard()) {
+      Serial.println("RFID access granted.");
+      Firebase.setString(firebaseData, "/SystemStatus/RFID/CardStatus", "Granted");
+
+      digitalWrite(LIGHT_PIN, HIGH);
+      digitalWrite(RELAY_PIN, HIGH);
+      Firebase.setString(firebaseData, "/SystemStatus/Light", "ON");
+      Firebase.setString(firebaseData, "/SystemStatus/Relay", "ON");
+
+      delay(5000);
+
+      digitalWrite(LIGHT_PIN, LOW);
+      digitalWrite(RELAY_PIN, LOW);
+      Firebase.setString(firebaseData, "/SystemStatus/Light", "OFF");
+      Firebase.setString(firebaseData, "/SystemStatus/Relay", "OFF");
     } else {
-      Serial.println("Access Denied");
-      digitalWrite(BUZZER_PIN, HIGH);  // Turn on buzzer for invalid card
-      delay(1000); // Keep buzzer on for 1 second
-      digitalWrite(BUZZER_PIN, LOW);   // Turn off buzzer
+      Serial.println("RFID access denied.");
+      Firebase.setString(firebaseData, "/SystemStatus/RFID/CardStatus", "Denied");
+
+      digitalWrite(BUZZER_PIN, HIGH);
+      Firebase.setString(firebaseData, "/SystemStatus/Buzzer", "ON");
+
+      delay(1000);
+
+      digitalWrite(BUZZER_PIN, LOW);
+      Firebase.setString(firebaseData, "/SystemStatus/Buzzer", "OFF");
     }
 
-    // Stop processing card
     rfid.PICC_HaltA();
     rfid.PCD_StopCrypto1();
   }
-
-  delay(500);  // Short delay before the next loop iteration
 }
 
-// Fingerprint authentication function
 int getFingerprintID() {
   int p = finger.getImage();
-  if (p != FINGERPRINT_OK) {
-    if (p == FINGERPRINT_NOFINGER) {
-      return -1;  // No finger detected
-    }
-    Serial.print("Error taking image: ");
-    Serial.println(p);
-    return -1;
-  }
+  if (p != FINGERPRINT_OK) return -1;
 
   p = finger.image2Tz();
-  if (p != FINGERPRINT_OK) {
-    Serial.print("Error converting image: ");
-    Serial.println(p);
-    return -1;
-  }
+  if (p != FINGERPRINT_OK) return -1;
 
   p = finger.fingerFastSearch();
-  if (p != FINGERPRINT_OK) {
-    Serial.print("Fingerprint not found: ");
-    Serial.println(p);
-    return -1;  // Fingerprint not found in the database
-  }
+  if (p != FINGERPRINT_OK) return -1;
 
-  return finger.fingerID;  // Return the ID of the recognized fingerprint
+  return finger.fingerID;
 }
 
-// Function to check if the RFID card is valid
 bool isValidCard() {
   for (byte i = 0; i < 4; i++) {
     if (rfid.uid.uidByte[i] != validUID[i]) {
